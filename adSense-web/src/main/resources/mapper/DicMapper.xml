@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yuwei.adsense.dao.DicDao">
+    <resultMap id="DicMap" type="com.yuwei.adsense.core.entity.Dic">
+            <id property="id" column="id"/>
+            <result property="dicName" column="dic_name"/>
+            <result property="dicValue" column="dic_value"/>
+            <result property="isDelete" column="is_delete"/>
+    </resultMap>
+
+
+    <!-- templete 所有查询列 -->
+    <sql id="QUERY_COLUMN_LIST">
+        `id`,`dic_name`,`dic_value`,`is_delete`
+    </sql>
+
+    <!-- templete 查询列来源表-->
+    <sql id="QUERY_FROM_TABLE"><![CDATA[FROM t_dic]]></sql>
+
+    <!-- 全部条件(更多功能可以通过queryData扩展实现)  -->
+    <sql id="QUERY_WHERE_CLAUSE">
+        <where>
+            <if test="id != null and id != ''">
+                and `id` = #{id}
+            </if>
+            <if test="dicName != null and dicName != ''">
+                and `dic_name` = #{dicName}
+            </if>
+            <if test="dicValue != null and dicValue != ''">
+                and `dic_value` = #{dicValue}
+            </if>
+            <if test="isDelete != null and isDelete != ''">
+                and `is_delete` = #{isDelete}
+            </if>
+        </where>
+    </sql>
+
+    <!-- 智能排序与分页 -->
+    <sql id="QUERY_ORDER_LIMIT_CONDTION">
+        <if test="orderField != null and orderField != '' and orderFieldType != null and orderFieldType != ''"><![CDATA[ORDER BY `${orderField}` ${orderFieldType}]]></if>
+        <if test="startIndex != null and startIndex &gt;= 0 and pageSize != null and pageSize &gt; 0"><![CDATA[LIMIT #{startIndex},#{pageSize}]]></if>
+    </sql>
+
+    <!-- 更新列字段,只要不为NULL则更新,除开主键列 -->
+    <sql id="UPDATE_COLUMN_SET">
+        <set>
+            <if test="dicName != null and dicName != ''">
+                `dic_name`=#{dicName},
+            </if>
+            <if test="dicValue != null and dicValue != ''">
+                `dic_value`=#{dicValue},
+            </if>
+            <if test="isDelete != null and isDelete != ''">
+                `is_delete`=#{isDelete}
+            </if>
+        </set>
+    </sql>
+
+    <insert id="insert" parameterType="com.yuwei.adsense.core.entity.Dic" useGeneratedKeys="true" keyProperty="id">
+        <selectKey keyProperty="id" resultType="long" order="AFTER">
+            SELECT LAST_INSERT_ID();
+        </selectKey>
+        <![CDATA[
+		INSERT INTO t_dic(
+            `dic_name`,
+            `dic_value`,
+            `is_delete`
+		) VALUES(
+            #{dicName},
+            #{dicValue},
+            #{isDelete}
+		)
+		]]>
+    </insert>
+
+    <insert id="batchInsert">
+		INSERT INTO t_dic(
+            `dic_name`,
+            `dic_value`,
+		) VALUES
+    <foreach collection="list" item="item" index="index" separator=",">
+		(
+            #{item.dicName},
+            #{item.dicValue},
+            #{item.isDelete}
+		)
+    </foreach>
+
+    </insert>
+
+
+
+
+    <!-- 返回插入的编号,在事务开启状态下有效 -->
+    <select id="lastSequence" resultType="int"><![CDATA[SELECT LAST_INSERT_ID() AS id]]></select>
+
+    <!-- 删除记录,主键IN(array) -->
+    <delete id="del" parameterType="java.lang.reflect.Array" >
+        DELETE
+         <include refid="QUERY_FROM_TABLE"/>
+         WHERE id IN
+        <foreach collection="array" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!-- 删除,通过条件 -->
+    <update id="deleteByCondtion" parameterType="com.yuwei.adsense.core.entity.Dic" >
+        DELETE
+        <include refid="QUERY_FROM_TABLE"/>
+        <include refid="QUERY_WHERE_CLAUSE"/>
+    </update>
+
+    <!-- 修改记录通过主键 -->
+    <update id="update" parameterType="com.yuwei.adsense.core.entity.Dic" >
+        UPDATE t_dic
+        <include refid="UPDATE_COLUMN_SET"/>
+        WHERE id = #{id}
+    </update>
+
+
+    <update id="batchUpdate"  parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            UPDATE t_dic
+            <include refid="UPDATE_COLUMN_SET"/>
+            WHERE id = #{item.id}
+        </foreach>
+    </update>
+
+
+
+    <!-- 查询,通过主键IN(array) -->
+    <select id="get" parameterType="Long"  resultMap="DicMap">
+        SELECT
+        <include refid="QUERY_COLUMN_LIST"/>
+        <include refid="QUERY_FROM_TABLE"/>
+        WHERE
+        id = #{id}
+    </select>
+
+    <!-- 查询,通过条件 -->
+    <select id="list" parameterType="com.yuwei.adsense.core.entity.Dic" resultMap="DicMap">
+        <![CDATA[SELECT]]>
+        <include refid="QUERY_COLUMN_LIST"/>
+        <include refid="QUERY_FROM_TABLE"/>
+        <include refid="QUERY_WHERE_CLAUSE"/>
+        <include refid="QUERY_ORDER_LIMIT_CONDTION"/>
+    </select>
+
+    <!-- 总数查询,通过条件 -->
+    <select id="listCount" parameterType="com.yuwei.adsense.core.entity.Dic" resultType="int">
+        <![CDATA[SELECT COUNT(id) AS dataCount]]>
+        <include refid="QUERY_FROM_TABLE"/>
+        <include refid="QUERY_WHERE_CLAUSE"/>
+    </select>
+
+    <!-- 其它SQL语句 -->
+
+
+</mapper>

@@ -83,10 +83,14 @@
 		<property name="configLocation">
 			<value>classpath:mybatis-config.xml</value>
 		</property>
-		<property name="mapperLocations" value="classpath*:/config/**/*.xml" />
+		<property name="mapperLocations" value="classpath*:/mapper/**/*.xml" />
 		<property name="dataSource" ref="dataSource" />
 	</bean>
 
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.yuwei.adsense.dao"/>
+		<property name="sqlSessionFactoryBeanName" value="sessionFactory" />
+	</bean>
 	<!-- 定义事务管理器（声明式的事务） -->
 	<bean id="transactionManager"
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">

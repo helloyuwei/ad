@@ -4,6 +4,7 @@
 <head>
 
     <!-- start: Meta -->
+    <meta name="baidu_union_verify" content="95e5b0df833a9dce2006a2a29428ddd2">
     <meta charset="utf-8">
     <title>Bootstrap Metro Dashboard by Dennis Ji for ARM demo</title>
     <meta name="description" content="Bootstrap Metro Dashboard">
@@ -53,7 +54,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </a>
-            <a class="brand" href="index.html"><span>Metro</span></a>
+            <a class="brand" href="/dic/add.do"><span>Metro</span></a>
 
             <!-- start: Header Menu -->
             <div class="nav-no-collapse header-nav">

@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yuwei.adsense.dao.SiteDao">
+    <resultMap id="SiteMap" type="com.yuwei.adsense.core.entity.Site">
+            <id property="id" column="id"/>
+            <result property="siteName" column="site_name"/>
+            <result property="siteViewCount" column="site_view_count"/>
+            <result property="siteIcp" column="site_icp"/>
+            <result property="copyright" column="copyright"/>
+            <result property="siteUrl" column="site_url"/>
+    </resultMap>
+
+
+    <!-- templete 所有查询列 -->
+    <sql id="QUERY_COLUMN_LIST">
+        `id`,`site_name`,`site_view_count`,`site_icp`,`copyright`,`site_url`
+    </sql>
+
+    <!-- templete 查询列来源表-->
+    <sql id="QUERY_FROM_TABLE"><![CDATA[FROM t_site]]></sql>
+
+    <!-- 全部条件(更多功能可以通过queryData扩展实现)  -->
+    <sql id="QUERY_WHERE_CLAUSE">
+        <where>
+            <if test="id != null and id != ''">
+                and `id` = #{id}
+            </if>
+            <if test="siteName != null and siteName != ''">
+                and `site_name` = #{siteName}
+            </if>
+            <if test="siteViewCount != null and siteViewCount != ''">
+                and `site_view_count` = #{siteViewCount}
+            </if>
+            <if test="siteIcp != null and siteIcp != ''">
+                and `site_icp` = #{siteIcp}
+            </if>
+            <if test="copyright != null and copyright != ''">
+                and `copyright` = #{copyright}
+            </if>
+            <if test="siteUrl != null and siteUrl != ''">
+                and `site_url` = #{siteUrl}
+            </if>
+        </where>
+    </sql>
+
+    <!-- 智能排序与分页 -->
+    <sql id="QUERY_ORDER_LIMIT_CONDTION">
+        <if test="orderField != null and orderField != '' and orderFieldType != null and orderFieldType != ''"><![CDATA[ORDER BY `${orderField}` ${orderFieldType}]]></if>
+        <if test="startIndex != null and startIndex &gt;= 0 and pageSize != null and pageSize &gt; 0"><![CDATA[LIMIT #{startIndex},#{pageSize}]]></if>
+    </sql>
+
+    <!-- 更新列字段,只要不为NULL则更新,除开主键列 -->
+    <sql id="UPDATE_COLUMN_SET">
+        <set>
+            <if test="siteName != null and siteName != ''">
+                `site_name`=#{siteName},
+            </if>
+            <if test="siteViewCount != null and siteViewCount != ''">
+                `site_view_count`=#{siteViewCount},
+            </if>
+            <if test="siteIcp != null and siteIcp != ''">
+                `site_icp`=#{siteIcp},
+            </if>
+            <if test="copyright != null and copyright != ''">
+                `copyright`=#{copyright},
+            </if>
+            <if test="siteUrl != null and siteUrl != ''">
+                `site_url`=#{siteUrl}
+            </if>
+        </set>
+    </sql>
+
+    <insert id="insert" parameterType="com.yuwei.adsense.core.entity.Site" useGeneratedKeys="true" keyProperty="id">
+        <selectKey keyProperty="id" resultType="long" order="AFTER">
+            SELECT LAST_INSERT_ID();
+        </selectKey>
+        <![CDATA[
+		INSERT INTO t_site(
+            `site_name`,
+            `site_view_count`,
+            `site_icp`,
+            `copyright`,
+            `site_url`
+		) VALUES(
+            #{siteName},
+            #{siteViewCount},
+            #{siteIcp},
+            #{copyright},
+            #{siteUrl}
+		)
+		]]>
+    </insert>
+
+    <insert id="batchInsert">
+		INSERT INTO t_site(
+            `site_name`,
+            `site_view_count`,
+            `site_icp`,
+            `copyright`,
+            `site_url`
+		) VALUES
+    <foreach collection="list" item="item" index="index" separator=",">
+		(
+            #{item.siteName},
+            #{item.siteViewCount},
+            #{item.siteIcp},
+            #{item.copyright},
+            #{item.siteUrl}
+		)
+    </foreach>
+
+    </insert>
+
+
+
+
+    <!-- 返回插入的编号,在事务开启状态下有效 -->
+    <select id="lastSequence" resultType="int"><![CDATA[SELECT LAST_INSERT_ID() AS id]]></select>
+
+    <!-- 删除记录,主键IN(array) -->
+    <delete id="del" parameterType="java.lang.reflect.Array" >
+        DELETE
+         <include refid="QUERY_FROM_TABLE"/>
+         WHERE id IN
+        <foreach collection="array" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!-- 删除,通过条件 -->
+    <update id="deleteByCondtion" parameterType="com.yuwei.adsense.core.entity.Site" >
+        DELETE
+        <include refid="QUERY_FROM_TABLE"/>
+        <include refid="QUERY_WHERE_CLAUSE"/>
+    </update>
+
+    <!-- 修改记录通过主键 -->
+    <update id="update" parameterType="com.yuwei.adsense.core.entity.Site" >
+        UPDATE t_site
+        <include refid="UPDATE_COLUMN_SET"/>
+        WHERE id = #{id}
+    </update>
+
+
+    <update id="batchUpdate"  parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            UPDATE t_site
+            <include refid="UPDATE_COLUMN_SET"/>
+            WHERE id = #{item.id}
+        </foreach>
+    </update>
+
+
+
+    <!-- 查询,通过主键IN(array) -->
+    <select id="get" parameterType="Long"  resultMap="SiteMap">
+        SELECT
+        <include refid="QUERY_COLUMN_LIST"/>
+        <include refid="QUERY_FROM_TABLE"/>
+        WHERE
+        id = #{id}
+    </select>
+
+    <!-- 查询,通过条件 -->
+    <select id="list" parameterType="com.yuwei.adsense.core.entity.Site" resultMap="SiteMap">
+        <![CDATA[SELECT]]>
+        <include refid="QUERY_COLUMN_LIST"/>
+        <include refid="QUERY_FROM_TABLE"/>
+        <include refid="QUERY_WHERE_CLAUSE"/>
+        <include refid="QUERY_ORDER_LIMIT_CONDTION"/>
+    </select>
+
+    <!-- 总数查询,通过条件 -->
+    <select id="listCount" parameterType="com.yuwei.adsense.core.entity.Site" resultType="int">
+        <![CDATA[SELECT COUNT(id) AS dataCount]]>
+        <include refid="QUERY_FROM_TABLE"/>
+        <include refid="QUERY_WHERE_CLAUSE"/>
+    </select>
+
+    <!-- 其它SQL语句 -->
+
+
+</mapper>
