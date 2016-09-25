@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 @RequestMapping(value = "/image")
-public class ImageController extends BaseServerController<Image> {
+public class ImageController extends BaseWebController<Image> {
 
     @Autowired
     private ImageService imageService;

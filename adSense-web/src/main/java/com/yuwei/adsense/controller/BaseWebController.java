@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Created by YuWei on 2016/9/22.
  */
-public abstract class BaseServerController<E> {
+public abstract class BaseWebController<E> {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     private HttpServletRequest request;

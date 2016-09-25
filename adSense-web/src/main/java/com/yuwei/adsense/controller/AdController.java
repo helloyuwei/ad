@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 @RequestMapping(value = "/ad")
-public class AdController extends BaseServerController<Ad> {
+public class AdController extends BaseWebController<Ad> {
 
     @Autowired
     private AdService adService;

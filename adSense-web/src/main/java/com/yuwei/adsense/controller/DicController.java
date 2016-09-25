@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
  */
 @Controller
 @RequestMapping(value = "/dic")
-public class DicController extends BaseServerController<Dic> {
+public class DicController extends BaseWebController<Dic> {
 
     @Autowired
     private DicService dicService;
