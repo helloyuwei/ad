@@ -24,13 +24,41 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
+    <filter>
+        <filter-name>shiroFilter</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+        <init-param>
+            <param-name>targetFilterLifecycle</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        <init-param>
+            <param-name>targetBeanName</param-name>
+            <param-value>shiroFilter</param-value>
+        </init-param>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>shiroFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>populateConfigFilter</filter-name>
+        <filter-class>com.yuwei.adsense.filter.PopulateConfigFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>populateConfigFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
 
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>classpath*:applicationContext.xml</param-value>
+        <param-value>classpath*:applicationContext*.xml</param-value>
     </context-param>
 
     <context-param>
@@ -57,7 +85,7 @@
 
     <servlet-mapping>
         <servlet-name>springMvc</servlet-name>
-        <url-pattern>*.do</url-pattern>
+        <url-pattern>/</url-pattern>
     </servlet-mapping>
 
     <session-config>
@@ -66,7 +94,22 @@
     <welcome-file-list>
         <welcome-file>/index.jsp</welcome-file>
     </welcome-file-list>
-
+    <error-page>
+        <error-code>405</error-code>
+        <location>/WEB-INF/405.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>404</error-code>
+        <location>/WEB-INF/404.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>500</error-code>
+        <location>/WEB-INF/500.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>java.lang.Throwable</error-code>
+        <location>/WEB-INF/500.jsp</location>
+    </error-page>
     <!--   需要在普通类中使用request的时候，注入这个监听 -->
     <listener>
         <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>

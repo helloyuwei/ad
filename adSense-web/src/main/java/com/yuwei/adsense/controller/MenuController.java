@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 @RequestMapping(value = "/menu")
-public class MenuController extends BaseServerController<Menu> {
+public class MenuController extends BaseWebController<Menu> {
 
     @Autowired
     private MenuService menuService;
