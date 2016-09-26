@@ -17,6 +17,7 @@ public class RequestUtils {
     public static final String ERROR_MESSAGE_PARAM = "error_msg";
     public static final String INFO_MESSAGE_PARAM = "info_msg";
     public static final String ADMIN_PATH_KEY = "adminPath";
+    public static final String CONTEXT_PATH_KEY = "ctx";
 
     public static String getRemoeIP(HttpServletRequest request) {
 
@@ -87,5 +88,10 @@ public class RequestUtils {
     public static void addPropertyToSession(HttpServletRequest request, String key, Object value) {
 
         request.getSession(true).setAttribute(key, value);
+    }
+
+    public static String getContextPath(ServletRequest request) {
+        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+        return httpServletRequest.getContextPath();
     }
 }

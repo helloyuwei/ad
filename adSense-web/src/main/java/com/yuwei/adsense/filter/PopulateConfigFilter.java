@@ -18,6 +18,7 @@ public class PopulateConfigFilter implements Filter {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         httpServletRequest.setAttribute(RequestUtils.ADMIN_PATH_KEY, RequestUtils.getAdminPath());
         RequestUtils.addPropertyToSession(httpServletRequest, RequestUtils.ADMIN_PATH_KEY, RequestUtils.getAdminPath());
+        httpServletRequest.setAttribute(RequestUtils.CONTEXT_PATH_KEY, RequestUtils.getContextPath(request));
         chain.doFilter(request, response);
     }
 

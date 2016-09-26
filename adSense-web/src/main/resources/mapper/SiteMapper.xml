@@ -178,6 +178,13 @@
     </select>
 
     <!-- 其它SQL语句 -->
-
+    <select id="loadAllSites" resultMap="SiteMap">
+         <![CDATA[SELECT]]>
+         <include refid="QUERY_COLUMN_LIST"/>
+         <include refid="QUERY_FROM_TABLE"/>
+        <where>
+            is_delete = 0
+        </where>
+  </select>
 
 </mapper>
