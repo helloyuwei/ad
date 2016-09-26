@@ -9,6 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 /**
  * <br />
@@ -26,5 +28,9 @@ public class SiteServiceImpl extends BaseServiceImpl<Site, Long> implements Site
 
     public BaseDao<Site, Long> getDao() {
         return siteDao;
+    }
+
+    public List<Site> loadAllSites() {
+        return siteDao.loadAllSites();
     }
 }

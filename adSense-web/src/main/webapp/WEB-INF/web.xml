@@ -106,10 +106,6 @@
         <error-code>500</error-code>
         <location>/WEB-INF/500.jsp</location>
     </error-page>
-    <error-page>
-        <error-code>java.lang.Throwable</error-code>
-        <location>/WEB-INF/500.jsp</location>
-    </error-page>
     <!--   需要在普通类中使用request的时候，注入这个监听 -->
     <listener>
         <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
