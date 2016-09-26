@@ -31,11 +31,10 @@ import java.io.IOException;
 public class LoginController extends BaseWebController<User> {
     private Logger logger = Logger.getLogger(this.getClass());
 
-
     /**
      * 用户登出
      */
-    @RequestMapping("/forLogin")
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String forLogin(HttpServletRequest request) {
         return RequestUtils.getAdminUrl("/login");
     }
@@ -84,12 +83,17 @@ public class LoginController extends BaseWebController<User> {
         logger.debug("为了验证登录用户而封装的token为" + ReflectionToStringBuilder.toString(token, ToStringStyle.MULTI_LINE_STYLE));
         //获取当前的Subject
         Subject currentUser = SecurityUtils.getSubject();
+        boolean isLogined = false;
         try {
             //在调用了login方法后,SecurityManager会收到AuthenticationToken,并将其发送给已配置的Realm执行必须的认证检查
             //每个Realm都能在必要时对提交的AuthenticationTokens作出反应
             //所以这一步在调用login(token)方法时,它会走到MyRealm.doGetAuthenticationInfo()方法中,具体验证方式详见此方法
             logger.debug("对用户[" + username + "]进行登录验证..验证开始");
             currentUser.login(token);
+            token.clear();
+            User user = (User) currentUser.getSession().getAttribute("currentUser");
+            request.getSession(false).setAttribute("currentUser", user);
+            isLogined = true;
             logger.debug("对用户[" + username + "]进行登录验证..验证通过");
         } catch (UnknownAccountException uae) {
             logger.debug("对用户[" + username + "]进行登录验证..验证未通过,未知账户");
@@ -115,7 +119,11 @@ public class LoginController extends BaseWebController<User> {
         } else {
             token.clear();
         }
-        return RequestUtils.getRedirectAdminUrl("main");
+        if(isLogined) {
+            return RequestUtils.getRedirectAdminUrl("main");
+        }else {
+            return RequestUtils.getAdminUrl("login");
+        }
     }
 
     /**
@@ -124,7 +132,8 @@ public class LoginController extends BaseWebController<User> {
     @RequestMapping("/logout")
     public String logout(HttpServletRequest request) {
         SecurityUtils.getSubject().logout();
-        return RequestUtils.getForwardAdminUrl("/");
+        request.getSession(false).removeAttribute("currentUser");
+        return RequestUtils.getAdminUrl("/login");
     }
 
 }

@@ -11,23 +11,23 @@
 <!-- end: Mobile Specific -->
 
 <!-- start: CSS -->
-<link id="bootstrap-style" href="../../css/bootstrap.min.css" rel="stylesheet">
-<link href="../../css/bootstrap-responsive.min.css" rel="stylesheet">
-<link id="base-style" href="../../css/style.css" rel="stylesheet">
-<link id="base-style-responsive" href="../../css/style-responsive.css" rel="stylesheet">
+<link id="bootstrap-style" href="${ctx}/css/bootstrap.min.css" rel="stylesheet">
+<link href="${ctx}/css/bootstrap-responsive.min.css" rel="stylesheet">
+<link id="base-style" href="${ctx}/css/style.css" rel="stylesheet">
+<link id="base-style-responsive" href="${ctx}/css/style-responsive.css" rel="stylesheet">
 <!-- end: CSS -->
 
 
 <!-- The HTML5 shim, for IE6-8 support of HTML5 elements -->
 <!--[if lt IE 9]>
 <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-<link id="ie-style" href="../../css/ie.css" rel="stylesheet">
+<link id="ie-style" href="${ctx}/css/ie.css" rel="stylesheet">
 <![endif]-->
 
 <!--[if IE 9]>
-<link id="ie9style" href="../../css/ie9.css" rel="stylesheet">
+<link id="ie9style" href="${ctx}/css/ie9.css" rel="stylesheet">
 <![endif]-->
 
 <!-- start: Favicon -->
-<link rel="shortcut icon" href="../../img/favicon.ico">
+<link rel="shortcut icon" href="${ctx}/img/favicon.ico">
 <!-- end: Favicon -->

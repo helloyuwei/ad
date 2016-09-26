@@ -13,4 +13,5 @@
 	</bean>
 	<bean id="systemAuthorizingRealm" class="com.yuwei.adsense.shiro.SystemAuthorizingRealm">
 	</bean>
+	<bean class="com.yuwei.adsense.listener.LoadSiteListener"/>
 </beans>

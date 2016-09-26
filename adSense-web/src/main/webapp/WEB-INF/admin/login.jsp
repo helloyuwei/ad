@@ -10,7 +10,7 @@
     <%@ include file="include/header.jsp" %>
     <style type="text/css">
         body {
-            background: url(/img/bg-login.jpg) !important;
+            background: url(${ctx}/img/bg-login.jpg) !important;
         }
     </style>
 </head>
@@ -26,7 +26,7 @@
                     <a href="#"><i class="halflings-icon cog"></i></a>
                 </div>
                 <h2>Login to your account</h2>
-                <form class="form-horizontal" action="${adminPath}/login" method="post">
+                <form class="form-horizontal" action="${ctx}${adminPath}/login" method="post">
                     <fieldset>
 
                         <div class="input-prepend" title="Username">
@@ -46,7 +46,7 @@
                         <div class="input-prepend" title="Password">
                             <span class="add-on"><i class="halflings-icon lock"></i></span>
                             <input class="input-large span8" name="verifyCode" id="verifyCode" type="text" placeholder="请输入验证信息"/>
-                            <img class="span2" src="${adminPath}/getVerifyCodeImage"/>
+                            <img class="span2" src="${ctx}${adminPath}/getVerifyCodeImage"/>
                         </div>
                         <div class="clearfix"></div>
 
