@@ -1,8 +1,8 @@
 package com.yuwei.adsense.listener;
 
-import com.yuwei.adsense.common.SiteContext;
 import com.yuwei.adsense.core.entity.Site;
 import com.yuwei.adsense.services.SiteService;
+import com.yuwei.adsense.util.SpringContextUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * Created by YuWei on 2016/9/26.
  */
-public class LoadSiteListener implements ApplicationListener<ContextRefreshedEvent> {
+public class WebContextInitializedListener implements ApplicationListener<ContextRefreshedEvent> {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
@@ -22,10 +22,13 @@ public class LoadSiteListener implements ApplicationListener<ContextRefreshedEve
 
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
         if (contextRefreshedEvent.getApplicationContext().getParent() == null) {
+            SpringContextUtils.setApplicationContext(contextRefreshedEvent.getApplicationContext());
             logger.info("加载站点信息.....");
             List<Site> sites = siteService.loadAllSites();
-            SiteContext.addAllSites(sites);
+            SpringContextUtils.addAllSites(sites);
             logger.info("站点信息加载完成....");
+        }else {
+            SpringContextUtils.setWebApplicationContext(contextRefreshedEvent.getApplicationContext());
         }
     }
 }

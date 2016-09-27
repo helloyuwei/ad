@@ -1,21 +1,10 @@
-<%--
-  User: YuWei
-  Date: 2016/9/23
-  Time: 15:47
-  To change this template use File | Settings | File Templates.
---%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html lang="en">
-<head>
-    <%@ include file="include/header.jsp" %>
-    <style type="text/css">
-        body {
-            background: url(${ctx}/img/bg-login.jpg) !important;
-        }
-    </style>
-</head>
+<%@ include file="include/header.jsp" %>
+<style type="text/css">
+    body {
+        background: url(${ctx}${staticPath}/img/bg-login.jpg) !important;
+    }
+</style>
 
-<body>
 <div class="container-fluid-full">
     <div class="row-fluid">
 
@@ -50,8 +39,8 @@
                         </div>
                         <div class="clearfix"></div>
 
-                        <label class="remember" for="remember">
-                            <input type="checkbox" name="remember" id="remember"/>Remember me</label>
+                        <label class="remember" for="rememberMe">
+                            <input type="checkbox" name="rememberMe" id="rememberMe" value="true"/>记住我</label>
 
                         <div class="button-login">
                             <button type="submit" class="btn btn-primary">Login</button>
@@ -60,9 +49,9 @@
                     </fieldset>
                 </form>
                 <hr>
-                <h3>Forgot Password?</h3>
+                <h3>忘记密码?</h3>
                 <p>
-                    No problem, <a href="#">click here</a> to get a new password.
+                   没关系, <a href="#">点击我</a> 获取新密码.
                 </p>
             </div><!--/span-->
         </div><!--/row-->
@@ -71,5 +60,6 @@
     </div><!--/.fluid-container-->
 
 </div><!--/fluid-row-->
-<%@ include file="include/javascript.jsp" %>
-</body>
+
+
+<%@ include file="include/footer.jspf" %>

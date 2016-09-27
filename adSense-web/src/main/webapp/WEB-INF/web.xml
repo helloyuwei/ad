@@ -108,6 +108,9 @@
     </error-page>
     <!--   需要在普通类中使用request的时候，注入这个监听 -->
     <listener>
-        <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+        <listener-class>com.yuwei.adsense.listener.RequestContextLoadedListener</listener-class>
+    </listener>
+    <listener>
+        <listener-class>com.yuwei.adsense.listener.SessionCreateListener</listener-class>
     </listener>
 </web-app>

@@ -1,10 +1,10 @@
 package com.yuwei.adsense.util;
 
 import com.yuwei.adsense.common.Global;
+import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.web.util.WebUtils;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
-import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -18,18 +18,38 @@ public class RequestUtils {
     public static final String INFO_MESSAGE_PARAM = "info_msg";
     public static final String ADMIN_PATH_KEY = "adminPath";
     public static final String CONTEXT_PATH_KEY = "ctx";
+    public static final String STATIC_RESOURCE_URL_KEY = "staticPath";
+    public static final String CURRENT_SITE_KEY = "site";
 
-    public static String getRemoeIP(HttpServletRequest request) {
+    private static ThreadLocal<HttpServletRequest> servletRequestThreadLocal = new ThreadLocal<HttpServletRequest>();
 
-        String ip = request.getHeader("x-forwarded-for");
+    public static void setRequest(HttpServletRequest request) {
+        servletRequestThreadLocal.set(request);
+    }
+
+    public static HttpServletRequest getRequest() {
+        return servletRequestThreadLocal.get();
+    }
+
+    public static void setErrorMessage(String msg) {
+        getRequest().setAttribute(ERROR_MESSAGE_PARAM, msg);
+    }
+
+    public static void setInfoMessage(String msg) {
+        getRequest().setAttribute(INFO_MESSAGE_PARAM, msg);
+    }
+
+    public static String getRemoeIP() {
+
+        String ip = getRequest().getHeader("x-forwarded-for");
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("Proxy-Client-IP");
+            ip = getRequest().getHeader("Proxy-Client-IP");
         }
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("WL-Proxy-Client-IP");
+            ip = getRequest().getHeader("WL-Proxy-Client-IP");
         }
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getRemoteAddr();
+            ip = getRequest().getRemoteAddr();
         }
         final String[] arr = ip.split(",");
         for (final String str : arr) {
@@ -41,24 +61,24 @@ public class RequestUtils {
         return ip;
     }
 
-    public static String getRemoteHost(HttpServletRequest request) {
-        if (request == null) {
+    public static String getRemoteHost() {
+        if (getRequest() == null) {
             return "";
         }
-        return request.getRemoteAddr();
+        return getRequest().getRemoteAddr();
     }
 
 
-    public static boolean isMobileLogin(ServletRequest request) {
-        return WebUtils.isTrue(request, MOBILE_PARAM);
+    public static boolean isMobileLogin() {
+        return WebUtils.isTrue(getRequest(), MOBILE_PARAM);
     }
 
-    public static String getCaptcha(ServletRequest request) {
-        return WebUtils.getCleanParam(request, CAPTCHA_PARAM);
+    public static String getCaptcha() {
+        return WebUtils.getCleanParam(getRequest(), CAPTCHA_PARAM);
     }
 
     public static String getAdminPath() {
-        return Global.getConfig(ADMIN_PATH_KEY);
+        return Global.getStringVal(ADMIN_PATH_KEY);
     }
 
     public static String getAdminUrl(String url) {
@@ -90,8 +110,31 @@ public class RequestUtils {
         request.getSession(true).setAttribute(key, value);
     }
 
-    public static String getContextPath(ServletRequest request) {
-        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+    public static String getContextPath() {
+        HttpServletRequest httpServletRequest = getRequest();
         return httpServletRequest.getContextPath();
+    }
+
+    public static String getStaticUrl() {
+        return Global.getStringVal(RequestUtils.STATIC_RESOURCE_URL_KEY);
+    }
+
+    public static boolean isStaticFile(String uri) {
+        if (StringUtils.isEmpty(uri)) {
+            return false;
+        }
+        if (uri.startsWith(RequestUtils.getStaticUrl())) {
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean isRememberMe() {
+        String rememberMe = WebUtils.getCleanParam(RequestUtils.getRequest(), "rememberMe");
+        if (StringUtils.isNotEmpty(rememberMe)
+                && ("true".equalsIgnoreCase(rememberMe) || !"0".equalsIgnoreCase(rememberMe) || "no".equalsIgnoreCase(rememberMe))) {
+            return true;
+        }
+        return false;
     }
 }

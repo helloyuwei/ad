@@ -22,6 +22,10 @@
                 /img/** = anon
                 /js/** = anon
                 ${adminPath}/getVerifyCodeImage = anon
+                ${adminPath}/forgotPassword = anon
+                ${adminPath}/sendResetPassword = anon
+                ${adminPath}/toResetPassword = anon
+                ${adminPath}/resetPassword = anon
                 ${adminPath}/login = anon
                 ${adminPath}/logout = anon
                 ${adminPath}/** = user
@@ -48,20 +52,20 @@
     <!-- 定义Shiro安全管理配置 -->
     <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
         <property name="realm" ref="systemAuthorizingRealm" />
-       <!-- <property name="sessionManager" ref="sessionManager" />-->
-        <property name="cacheManager" ref="shiroCacheManager" />
+        <property name="sessionManager" ref="sessionManager" />
+        <property name="rememberMeManager" ref="rememberMeManager"/>
     </bean>
 
     <!-- 自定义会话管理配置 -->
     <bean id="sessionManager" class="com.yuwei.adsense.shiro.SessionManager">
-        <property name="sessionDAO" ref="sessionDAO"/>
+        <property name="sessionDAO" ref="sessionProvider"/>
 
         <!-- 会话超时时间，单位：毫秒  -->
         <property name="globalSessionTimeout" value="${session.sessionTimeout}"/>
 
         <!-- 定时清理失效会话, 清理用户直接关闭浏览器造成的孤立会话   -->
         <property name="sessionValidationInterval" value="${session.sessionTimeoutClean}"/>
-        <!--          <property name="sessionValidationSchedulerEnabled" value="false"/> -->
+        <!--<property name="sessionValidationSchedulerEnabled" value="false"/> -->
         <property name="sessionValidationSchedulerEnabled" value="true"/>
 
         <property name="sessionIdCookie" ref="sessionIdCookie"/>
@@ -72,17 +76,27 @@
         当跳出SHIRO SERVLET时如ERROR-PAGE容器会为JSESSIONID重新分配值导致登录会话丢失! -->
     <bean id="sessionIdCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
         <constructor-arg name="name" value="jeesite.session.id"/>
+        <property name="httpOnly" value="true"/>
+        <property name="maxAge" value="-1"/>
     </bean>
 
-    <bean id="sessionDAO" class="com.yuwei.adsense.shiro.ShiroCacheSessionProvider">
+    <bean id="sessionProvider" class="com.yuwei.adsense.shiro.ShiroCacheSessionProvider">
         <property name="sessionIdGenerator" ref="idGen" />
-        <property name="activeSessionsCacheName" value="activeSessionsCache" />
-        <property name="cacheManager" ref="shiroCacheManager" />
     </bean>
 
     <!-- 定义授权缓存管理器 -->
-    <bean id="shiroCacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
-        <property name="cacheManager" ref="cacheManager"/>
+     <bean id="shiroCacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
+         <property name="cacheManager" ref="cacheManager"/>
+     </bean>
+    <bean id="rememberMeManager" class="org.apache.shiro.web.mgt.CookieRememberMeManager">
+        <property name="cipherKey" value="#{T(org.apache.shiro.codec.Base64).decode('4AvVhmFLUs0KTA3Kprsdag==')}"/>
+        <property name="cookie" ref="rememberMeCookie"/>
+    </bean>
+
+    <bean id="rememberMeCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
+        <constructor-arg value="rememberMe"/>
+        <property name="httpOnly" value="true"/>
+        <property name="maxAge" value="2592000"/><!-- 30天 -->
     </bean>
 
     <!-- 保证实现了Shiro内部lifecycle函数的bean执行 -->

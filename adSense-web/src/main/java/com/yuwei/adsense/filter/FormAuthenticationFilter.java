@@ -48,8 +48,8 @@ public class FormAuthenticationFilter extends org.apache.shiro.web.filter.authc.
         }
         boolean rememberMe = isRememberMe(request);
 
-        String host = RequestUtils.getRemoteHost((HttpServletRequest) request);
-        boolean mobile = RequestUtils.isMobileLogin(request);
+        String host = RequestUtils.getRemoteHost();
+        boolean mobile = RequestUtils.isMobileLogin();
         return new ShiroUsernamePasswordToken(username, password.toCharArray(), rememberMe, host, mobile);
     }
 

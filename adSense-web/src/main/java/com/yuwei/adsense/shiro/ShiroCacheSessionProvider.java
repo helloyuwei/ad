@@ -3,7 +3,7 @@ package com.yuwei.adsense.shiro;
 import com.google.common.collect.Sets;
 import com.yuwei.adsense.common.Global;
 import com.yuwei.adsense.util.DateUtils;
-import com.yuwei.adsense.web.Servlets;
+import com.yuwei.adsense.util.RequestUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.UnknownSessionException;
@@ -37,19 +37,19 @@ public class ShiroCacheSessionProvider extends EnterpriseCacheSessionDAO impleme
             return;
         }
 
-        HttpServletRequest request = Servlets.getRequest();
+        HttpServletRequest request = RequestUtils.getRequest();
 
         if (request != null) {
 
             String uri = request.getServletPath();
             // 如果是静态文件，则不更新SESSION
-            if (Servlets.isStaticFile(uri)) {
+            if (RequestUtils.isStaticFile(uri)) {
                 return;
             }
 
             // 如果是视图文件，则不更新SESSION
-            if (StringUtils.startsWith(uri, Global.getConfig("web.view.prefix"))
-                    && StringUtils.endsWith(uri, Global.getConfig("web.view.suffix"))) {
+            if (StringUtils.startsWith(uri, Global.getStringVal("web.view.prefix"))
+                    && StringUtils.endsWith(uri, Global.getStringVal("web.view.suffix"))) {
                 return;
             }
 
@@ -77,12 +77,12 @@ public class ShiroCacheSessionProvider extends EnterpriseCacheSessionDAO impleme
     @Override
     protected Serializable doCreate(Session session) {
 
-        HttpServletRequest request = Servlets.getRequest();
+        HttpServletRequest request = RequestUtils.getRequest();
         if (request != null) {
             String uri = request.getServletPath();
 
             // 如果是静态文件，则不创建SESSION
-            if (Servlets.isStaticFile(uri)) {
+            if (RequestUtils.isStaticFile(uri)) {
                 return null;
             }
         }
@@ -106,14 +106,14 @@ public class ShiroCacheSessionProvider extends EnterpriseCacheSessionDAO impleme
 
             Session s = null;
 
-            HttpServletRequest request = Servlets.getRequest();
+            HttpServletRequest request = RequestUtils.getRequest();
 
             if (request != null) {
 
                 String uri = request.getServletPath();
 
                 // 如果是静态文件，则不获取SESSION
-                if (Servlets.isStaticFile(uri)) {
+                if (RequestUtils.isStaticFile(uri)) {
                     return null;
                 }
 

@@ -201,7 +201,22 @@
             <artifactId>aspectjweaver</artifactId>
             <version>1.5.3</version>
         </dependency>
-
+        <!-- activemq -->
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-core</artifactId>
+            <version>5.7.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-pool</artifactId>
+            <version>5.12.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.xbean</groupId>
+            <artifactId>xbean-spring</artifactId>
+            <version>4.3</version>
+        </dependency>
         <!-- spring-mvc -->
         <dependency>
             <groupId>org.springframework</groupId>
@@ -211,6 +226,11 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jms</artifactId>
             <version>${spring.version}</version>
         </dependency>
         <dependency>

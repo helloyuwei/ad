@@ -1,6 +1,7 @@
 package com.yuwei.adsense.filter;
 
 import com.yuwei.adsense.util.RequestUtils;
+import com.yuwei.adsense.util.SpringContextUtils;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -18,7 +19,9 @@ public class PopulateConfigFilter implements Filter {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         httpServletRequest.setAttribute(RequestUtils.ADMIN_PATH_KEY, RequestUtils.getAdminPath());
         RequestUtils.addPropertyToSession(httpServletRequest, RequestUtils.ADMIN_PATH_KEY, RequestUtils.getAdminPath());
-        httpServletRequest.setAttribute(RequestUtils.CONTEXT_PATH_KEY, RequestUtils.getContextPath(request));
+        httpServletRequest.setAttribute(RequestUtils.CONTEXT_PATH_KEY, RequestUtils.getContextPath());
+        httpServletRequest.setAttribute(RequestUtils.STATIC_RESOURCE_URL_KEY, RequestUtils.getStaticUrl());
+        httpServletRequest.setAttribute(RequestUtils.CURRENT_SITE_KEY, SpringContextUtils.getCurrentSite());
         chain.doFilter(request, response);
     }
 

@@ -10,8 +10,9 @@
 	</bean>
 
 	<bean id="formAuthenticationFilter" class="com.yuwei.adsense.filter.FormAuthenticationFilter">
+		<property name="rememberMeParam" value="rememberMe"/>
 	</bean>
 	<bean id="systemAuthorizingRealm" class="com.yuwei.adsense.shiro.SystemAuthorizingRealm">
 	</bean>
-	<bean class="com.yuwei.adsense.listener.LoadSiteListener"/>
+	<bean class="com.yuwei.adsense.listener.WebContextInitializedListener"/>
 </beans>

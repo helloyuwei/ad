@@ -1,17 +1,5 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: DELL
-  Date: 2016/9/23
-  Time: 14:50
-  To change this template use File | Settings | File Templates.
---%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
-<head>
-    <%@ include file="include/header.jsp" %>
-</head>
+<%@ include file="include/header.jsp" %>
 
-<body>
 <!-- start: Header -->
 <div class="navbar">
     <div class="navbar-inner">
@@ -107,16 +95,4 @@
     </div>
 </div>
 
-<div class="clearfix"></div>
-
-<footer>
-
-    <p>
-        <span style="text-align:left;float:left">&copy; 2013 <a href="http://jiji262.github.io/Bootstrap_Metro_Dashboard/" alt="Bootstrap_Metro_Dashboard">Bootstrap Metro Dashboard</a></span>
-
-    </p>
-
-</footer>
-<%@ include file="include/javascript.jsp" %>
-
-</body>
+<%@ include file="include/footer.jspf" %>

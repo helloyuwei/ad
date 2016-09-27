@@ -1,7 +1,9 @@
 package com.yuwei.adsense.controller.admin;
 
 import com.yuwei.adsense.controller.BaseWebController;
+import com.yuwei.adsense.core.UserUtils;
 import com.yuwei.adsense.core.entity.User;
+import com.yuwei.adsense.services.UserService;
 import com.yuwei.adsense.util.RequestUtils;
 import com.yuwei.adsense.util.VerifyCodeUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -11,7 +13,7 @@ import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.subject.Subject;
-import org.apache.shiro.web.util.WebUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -30,6 +32,9 @@ import java.io.IOException;
 @RequestMapping("/admin")
 public class LoginController extends BaseWebController<User> {
     private Logger logger = Logger.getLogger(this.getClass());
+
+    @Autowired
+    private UserService userService;
 
     /**
      * 用户登出
@@ -71,15 +76,15 @@ public class LoginController extends BaseWebController<User> {
         //获取HttpSession中的验证码
         String verifyCode = (String) request.getSession().getAttribute(RequestUtils.CAPTCHA_PARAM);
         //获取用户请求表单中输入的验证码
-        String submitCode = RequestUtils.getCaptcha(request);
+        String submitCode = RequestUtils.getCaptcha();
         logger.debug("用户[" + username + "]登录时输入的验证码为[" + submitCode + "],HttpSession中的验证码为[" + verifyCode + "]");
         if (StringUtils.isEmpty(submitCode) || !StringUtils.equals(verifyCode, submitCode.toLowerCase())) {
-            request.setAttribute(RequestUtils.ERROR_MESSAGE_PARAM, "验证码不正确");
+            RequestUtils.setErrorMessage("验证码不正确");
             return RequestUtils.getForwardAdminUrl("/");
         }
 
         UsernamePasswordToken token = new UsernamePasswordToken(username, password);
-        token.setRememberMe(Boolean.parseBoolean(WebUtils.getCleanParam(request,"remember")));
+        token.setRememberMe(RequestUtils.isRememberMe());
         logger.debug("为了验证登录用户而封装的token为" + ReflectionToStringBuilder.toString(token, ToStringStyle.MULTI_LINE_STYLE));
         //获取当前的Subject
         Subject currentUser = SecurityUtils.getSubject();
@@ -97,21 +102,21 @@ public class LoginController extends BaseWebController<User> {
             logger.debug("对用户[" + username + "]进行登录验证..验证通过");
         } catch (UnknownAccountException uae) {
             logger.debug("对用户[" + username + "]进行登录验证..验证未通过,未知账户");
-            request.setAttribute(RequestUtils.ERROR_MESSAGE_PARAM, "未知账户");
+            RequestUtils.setErrorMessage("未知账户");
         } catch (IncorrectCredentialsException ice) {
             logger.debug("对用户[" + username + "]进行登录验证..验证未通过,错误的凭证");
-            request.setAttribute(RequestUtils.ERROR_MESSAGE_PARAM, "密码不正确");
+            RequestUtils.setErrorMessage("密码不正确");
         } catch (LockedAccountException lae) {
             logger.debug("对用户[" + username + "]进行登录验证..验证未通过,账户已锁定");
-            request.setAttribute(RequestUtils.ERROR_MESSAGE_PARAM, "账户已锁定");
+            RequestUtils.setErrorMessage("账户已锁定");
         } catch (ExcessiveAttemptsException eae) {
             logger.debug("对用户[" + username + "]进行登录验证..验证未通过,错误次数过多");
-            request.setAttribute(RequestUtils.ERROR_MESSAGE_PARAM, "用户名或密码错误次数过多");
+            RequestUtils.setErrorMessage("用户名或密码错误次数过多");
         } catch (AuthenticationException ae) {
             //通过处理Shiro的运行时AuthenticationException就可以控制用户登录失败或密码错误时的情景
             logger.debug("对用户[" + username + "]进行登录验证..验证未通过,堆栈轨迹如下");
             ae.printStackTrace();
-            request.setAttribute(RequestUtils.ERROR_MESSAGE_PARAM, "用户名或密码不正确");
+            RequestUtils.setErrorMessage("用户名或密码不正确");
         }
         //验证是否登录成功
         if (currentUser.isAuthenticated()) {
@@ -119,9 +124,9 @@ public class LoginController extends BaseWebController<User> {
         } else {
             token.clear();
         }
-        if(isLogined) {
+        if (isLogined) {
             return RequestUtils.getRedirectAdminUrl("main");
-        }else {
+        } else {
             return RequestUtils.getAdminUrl("login");
         }
     }
@@ -136,4 +141,55 @@ public class LoginController extends BaseWebController<User> {
         return RequestUtils.getAdminUrl("/login");
     }
 
+
+    /**
+     * 忘记密码
+     */
+    @RequestMapping("/forgotPassword")
+    public String forgotPassword(HttpServletRequest request) {
+        return RequestUtils.getAdminUrl("/forgetPassword");
+    }
+
+    @RequestMapping("/sendResetPassword")
+    public void sendResetPassword(HttpServletRequest request) {
+
+    }
+
+    @RequestMapping("/toResetPassword")
+    public String toResetPassword(HttpServletRequest request) {
+        String token = request.getParameter("token");
+        String identity = request.getParameter("identity");
+        if (StringUtils.isEmpty(token) || StringUtils.isEmpty(identity)) {
+            RequestUtils.setErrorMessage("参数错误");
+            return RequestUtils.getAdminUrl("/login");
+        }
+
+        Long userId = UserUtils.getUserIdFromIdentity(identity);
+        if (userId == 0) {
+            RequestUtils.setErrorMessage("参数错误");
+            return RequestUtils.getAdminUrl("/login");
+        }
+        User user = userService.get(userId);
+        if (user == null) {
+            RequestUtils.setErrorMessage("用户不存在.");
+            return RequestUtils.getAdminUrl("/login");
+        }
+        if (!UserUtils.verifyResetToken(user, token)) {
+            RequestUtils.setErrorMessage("链接已失效，请重新获取重置密码链接.");
+            return RequestUtils.getAdminUrl("/login");
+        }
+        return RequestUtils.getAdminUrl("/resetPassword");
+    }
+
+    @RequestMapping("/resetPassword")
+    public String resetPassword(HttpServletRequest request) {
+        User user = userService.get(getEntity().getId());
+        if (user == null) {
+            return RequestUtils.getAdminUrl("/login");
+        }
+        user.setPassword(getEntity().getPassword());
+        userService.saveOrUpdate(user);
+        RequestUtils.setInfoMessage("密码重置成功，请使用新密码登陆!");
+        return RequestUtils.getAdminUrl("/login");
+    }
 }
