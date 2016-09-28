@@ -24,7 +24,7 @@ public class MessageConsumer {
             if (jmsHandler != null) {
                 jmsHandler.handMessage(model);
             } else {
-                this.logger.info(model.toString());
+                this.logger.info("None handler to process message: " + model.toString());
             }
         } else {
             throw new Exception("Object:[" + model + "] is not  entity Object ");

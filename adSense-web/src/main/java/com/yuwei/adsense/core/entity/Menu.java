@@ -1,5 +1,7 @@
 package com.yuwei.adsense.core.entity;
 
+import java.util.List;
+
 /**
  * 菜单名 <br />
  *
@@ -7,6 +9,12 @@ package com.yuwei.adsense.core.entity;
  * @createTime 2016-9-22 15:56:20
  */
 public class Menu extends BaseEntity {
+
+    private List<Menu> child;
+
+    private Long siteId;
+
+    private Integer order;
 
     /**
      *
@@ -42,6 +50,30 @@ public class Menu extends BaseEntity {
      * url 地址
      */
     private String url;
+
+    public List<Menu> getChild() {
+        return child;
+    }
+
+    public void setChild(List<Menu> child) {
+        this.child = child;
+    }
+
+    public Integer getOrder() {
+        return order;
+    }
+
+    public void setOrder(Integer order) {
+        this.order = order;
+    }
+
+    public Long getSiteId() {
+        return siteId;
+    }
+
+    public void setSiteId(Long siteId) {
+        this.siteId = siteId;
+    }
 
     public void setDisplayName(String displayName) {
         this.displayName = displayName;

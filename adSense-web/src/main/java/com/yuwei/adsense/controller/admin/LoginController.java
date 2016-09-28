@@ -2,9 +2,14 @@ package com.yuwei.adsense.controller.admin;
 
 import com.yuwei.adsense.controller.BaseWebController;
 import com.yuwei.adsense.core.UserUtils;
+import com.yuwei.adsense.core.entity.Site;
 import com.yuwei.adsense.core.entity.User;
+import com.yuwei.adsense.freemarker.impl.ResetPasswordEmailTemplateService;
+import com.yuwei.adsense.jms.MessageProducer;
+import com.yuwei.adsense.jms.model.EmailModel;
 import com.yuwei.adsense.services.UserService;
 import com.yuwei.adsense.util.RequestUtils;
+import com.yuwei.adsense.util.SpringContextUtils;
 import com.yuwei.adsense.util.VerifyCodeUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
@@ -14,6 +19,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -35,6 +41,10 @@ public class LoginController extends BaseWebController<User> {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private MessageProducer messageProducer;
+
 
     /**
      * 用户登出
@@ -152,7 +162,13 @@ public class LoginController extends BaseWebController<User> {
 
     @RequestMapping("/sendResetPassword")
     public void sendResetPassword(HttpServletRequest request) {
-
+        String toEmail = request.getParameter("email");
+        String loginName = request.getParameter("loginName");
+        Site currentSite = SpringContextUtils.getCurrentSite();
+        String emailContent = new ResetPasswordEmailTemplateService().getString(userService.getByUsername(loginName));
+        logger.info("重置密码内容：" + emailContent);
+        EmailModel emailModel = new EmailModel(toEmail, currentSite.getSiteName() + "-重置账号密码", emailContent);
+        messageProducer.send(emailModel);
     }
 
     @RequestMapping("/toResetPassword")

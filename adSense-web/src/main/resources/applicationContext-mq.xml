@@ -14,25 +14,30 @@
     <context:property-placeholder ignore-unresolvable="true" location="classpath*:*.properties"/>
 
     <!--(嵌入配置)activeMq消息容器-->
-    <amq:broker useJmx="true" persistent="true" >
+    <amq:broker useJmx="true" persistent="false">
         <amq:managementContext>
             <amq:managementContext createConnector="false"/>
         </amq:managementContext>
-        <amq:persistenceAdapter>
-            <amq:kahaDB directory="${jmsDir}" ></amq:kahaDB>
-        </amq:persistenceAdapter>
+        <!--  <amq:persistenceAdapter>
+              <amq:kahaDB directory="${jmsDir}" ></amq:kahaDB>
+          </amq:persistenceAdapter>-->
         <amq:transportConnectors>
-            <amq:transportConnector uri="tcp://${jms.ip}:${jms.port}" />
+            <amq:transportConnector uri="tcp://${jms.ip}:${jms.port}"/>
         </amq:transportConnectors>
     </amq:broker>
 
     <bean id="amqConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
-        <property name="brokerURL" value="vm://${jms.ip}?jms.useAsyncSend=true" />
+        <property name="brokerURL" value="vm://${jms.ip}?jms.useAsyncSend=true"/>
+        <property name="trustedPackages">
+            <list>
+                <value>com.yuwei.adsense.jms.model</value>
+            </list>
+        </property>
     </bean>
 
     <bean id="simpleJmsConnectionFactory" class="org.springframework.jms.connection.CachingConnectionFactory">
         <constructor-arg ref="amqConnectionFactory"/>
-        <property name="sessionCacheSize" value="100" />
+        <property name="sessionCacheSize" value="100"/>
         <property name="cacheConsumers" value="true"></property>
         <property name="exceptionListener" ref="jmsExceptionListener"/>
     </bean>
@@ -44,35 +49,26 @@
     <bean id="activeMqMessageConverter" class="com.yuwei.adsense.jms.ActiveMqMessageConverter"/>
 
     <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
-        <property name="connectionFactory" ref="simpleJmsConnectionFactory" />
+        <property name="connectionFactory" ref="simpleJmsConnectionFactory"/>
         <property name="defaultDestinationName" value="messageQueue"/>
+        <property name="messageConverter" ref="activeMqMessageConverter"/>
     </bean>
 
     <!-- 消息对象队列  -->
-    <amq:queue id="messageQueue" name="messageQueue" physicalName="messageQueue" />
-    <!-- 消息生产者   	-->
-    <bean id="messageProducer" class="com.yuwei.adsense.jms.MessageProducer"/>
-
+    <amq:queue id="messageQueue" name="messageQueue" physicalName="messageQueue"/>
     <!--
     	消息消费者
     	map配置的是队列中消息处理类。
-    	键：队列中消息类 对应的类 全路径 如： com.zzcdore.model.MailModel
+    	键：队列中消息类 对应的类 全路径 如: com.yuwei.adsense.jms.model.EmailModel
     	值：消息处理类,需要实现接口类IJmsHandler 。如：com.zzcdlatform.service.jms.impl.MailHandler
     	用户也可以配置自己的处理方式，配置到这里。
      -->
-
     <bean name="messageConsumer" class="com.yuwei.adsense.jms.MessageConsumer">
         <property name="handlers">
             <map>
-               <!-- <entry  key="com.zzcd.core.model.MailModel">
-                    <bean class="com.zzcd.platform.service.jms.impl.MailHandler"></bean>
+                <entry key="com.yuwei.adsense.jms.model.EmailModel">
+                    <bean class="com.yuwei.adsense.jms.handler.impl.SendEmailHandler"/>
                 </entry>
-                <entry  key="com.zzcd.core.model.SmsMobile">
-                    <bean class="com.zzcd.platform.service.jms.impl.SmsHandler"></bean>
-                </entry>
-                <entry  key="com.zzcd.core.model.InnerMessage">
-                    <bean class="com.zzcd.platform.service.jms.impl.InnerHandler"></bean>
-                </entry>-->
             </map>
         </property>
     </bean>
@@ -81,9 +77,9 @@
     <!--消息监听容器 -->
     <bean id="messageListenerContainer"
           class="org.springframework.jms.listener.DefaultMessageListenerContainer">
-        <property name="connectionFactory" ref="simpleJmsConnectionFactory" />
-        <property name="destination" ref="messageQueue" />
-        <property name="messageListener" ref="messageMsgListener" />
+        <property name="connectionFactory" ref="simpleJmsConnectionFactory"/>
+        <property name="destination" ref="messageQueue"/>
+        <property name="messageListener" ref="messageMsgListener"/>
     </bean>
 
     <!-- 邮件消息消费监听器  -->
@@ -91,7 +87,7 @@
         <constructor-arg>
             <ref bean="messageConsumer"/>
         </constructor-arg>
-        <property name="messageConverter" ref="activeMqMessageConverter" />
-        <property name="defaultListenerMethod" value="sendMessage" />
+        <property name="messageConverter" ref="activeMqMessageConverter"/>
+        <property name="defaultListenerMethod" value="sendMessage"/>
     </bean>
 </beans>
