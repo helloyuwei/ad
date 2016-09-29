@@ -23,7 +23,7 @@ public class DicController extends BaseWebController<Dic> {
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public String add() {
-        dicService.insert(getEntity());
+        //dicService.insert(getEntity());
         return "/";
     }
 }

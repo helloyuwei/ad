@@ -1,6 +1,7 @@
 package com.yuwei.adsense.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.yuwei.adsense.core.entity.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ui.Model;
@@ -19,17 +20,17 @@ public abstract class BaseWebController<E> {
     private HttpServletRequest request;
     private HttpServletResponse response;
     private Model model;
-    private E entity;
+    private User entity;
 
     @ModelAttribute
     public void setReqAndRes(HttpServletRequest request, HttpServletResponse response,
-                             @ModelAttribute("e") E entity, Model model) {
+                             User entity, Model model) {
         this.entity = entity;
         this.request = request;
         this.response = response;
         this.model = model;
         model.addAttribute("e", entity);
-        log.error("BaseAction:method called before:request=" + request + ",response=" + response
+        log.debug("BaseAction:method called before:request=" + request + ",response=" + response
                 + ",e=" + JSON.toJSONString(entity));
     }
 
@@ -64,11 +65,11 @@ public abstract class BaseWebController<E> {
         this.model = model;
     }
 
-    public E getEntity() {
+    public User getEntity() {
         return entity;
     }
 
-    public void setEntity(E entity) {
+    public void setEntity(User entity) {
         this.entity = entity;
     }
 }

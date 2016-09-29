@@ -4,7 +4,8 @@
         background: url(${ctx}${staticPath}/img/bg-login.jpg) !important;
     }
 </style>
-
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
 <div class="container-fluid-full">
     <div class="row-fluid">
 
@@ -31,14 +32,15 @@
                                    placeholder="请输入密码"/>
                         </div>
                         <div class="clearfix"></div>
-
-                        <div class="input-prepend" title="Password">
-                            <span class="add-on"><i class="halflings-icon lock"></i></span>
-                            <input class="input-large span8" name="verifyCode" id="verifyCode" type="text" placeholder="请输入验证信息"/>
-                            <img class="span2" src="${ctx}${adminPath}/getVerifyCodeImage"/>
-                        </div>
-                        <div class="clearfix"></div>
-
+                        <c:if test="${isCaptcha}">
+                            <div class="input-prepend" title="Password">
+                                <span class="add-on"><i class="halflings-icon lock"></i></span>
+                                <input class="input-large span8" name="verifyCode" id="verifyCode" type="text"
+                                       placeholder="请输入验证信息"/>
+                                <img class="span2" src="${ctx}${adminPath}/getVerifyCodeImage"/>
+                            </div>
+                            <div class="clearfix"></div>
+                        </c:if>
                         <label class="remember" for="rememberMe">
                             <input type="checkbox" name="rememberMe" id="rememberMe" value="true"/>记住我</label>
 

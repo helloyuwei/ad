@@ -16,15 +16,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
  * @createTime 2016-9-22 15:56:16
  */
 @Controller
-@RequestMapping(value = "/dic")
-public class DicController extends BaseWebController<Dic> {
+@RequestMapping(value = "/admin/dic")
+public class AdminDicController extends BaseWebController<Dic> {
 
     @Autowired
     private DicService dicService;
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public String add() {
-        dicService.insert(getEntity());
+        //dicService.insert(getEntity());
         return "/";
     }
 }

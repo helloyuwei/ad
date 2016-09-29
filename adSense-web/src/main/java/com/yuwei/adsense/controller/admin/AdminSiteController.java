@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @createTime 2016-9-22 23:05:16
  */
 @Controller
-@RequestMapping(value = "/site")
-public class SiteController extends BaseWebController<Site> {
+@RequestMapping(value = "/admin/site")
+public class AdminSiteController extends BaseWebController<Site> {
 
     @Autowired
     private SiteService siteService;

@@ -230,7 +230,7 @@
         ORDER BY order DESC
     </select>
 
-    <select id="selectChildren" parameterType="int" resultMap="KnowledgeLeafListMap">
+    <select id="selectChildren" parameterType="long" resultMap="MenuMap">
         <![CDATA[SELECT]]>
         <include refid="QUERY_COLUMN_LIST"/>
         <include refid="QUERY_FROM_TABLE"/>

@@ -1,5 +1,6 @@
 package com.yuwei.adsense.controller.admin;
 
+import com.yuwei.adsense.common.Global;
 import com.yuwei.adsense.controller.BaseWebController;
 import com.yuwei.adsense.core.UserUtils;
 import com.yuwei.adsense.core.entity.Site;
@@ -78,21 +79,23 @@ public class LoginController extends BaseWebController<User> {
      * 用户登录
      */
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public String login(HttpServletRequest request) {
+    public String login(HttpServletRequest request, User eUser) {
 
         String username = getEntity().getLoginName();
         String password = getEntity().getPassword();
-
-        //获取HttpSession中的验证码
-        String verifyCode = (String) request.getSession().getAttribute(RequestUtils.CAPTCHA_PARAM);
-        //获取用户请求表单中输入的验证码
-        String submitCode = RequestUtils.getCaptcha();
-        logger.debug("用户[" + username + "]登录时输入的验证码为[" + submitCode + "],HttpSession中的验证码为[" + verifyCode + "]");
-        if (StringUtils.isEmpty(submitCode) || !StringUtils.equals(verifyCode, submitCode.toLowerCase())) {
-            RequestUtils.setErrorMessage("验证码不正确");
-            return RequestUtils.getForwardAdminUrl("/");
+        boolean isCaptcha = Global.getBooleanVal("web.view.captcha.enable");
+        request.setAttribute("isCaptcha", isCaptcha);
+        if (isCaptcha) {
+            //获取HttpSession中的验证码
+            String verifyCode = (String) request.getSession().getAttribute(RequestUtils.CAPTCHA_PARAM);
+            //获取用户请求表单中输入的验证码
+            String submitCode = RequestUtils.getCaptcha();
+            logger.debug("用户[" + username + "]登录时输入的验证码为[" + submitCode + "],HttpSession中的验证码为[" + verifyCode + "]");
+            if (StringUtils.isEmpty(submitCode) || !StringUtils.equals(verifyCode, submitCode.toLowerCase())) {
+                RequestUtils.setErrorMessage("验证码不正确");
+                return RequestUtils.getForwardAdminUrl("/");
+            }
         }
-
         UsernamePasswordToken token = new UsernamePasswordToken(username, password);
         token.setRememberMe(RequestUtils.isRememberMe());
         logger.debug("为了验证登录用户而封装的token为" + ReflectionToStringBuilder.toString(token, ToStringStyle.MULTI_LINE_STYLE));

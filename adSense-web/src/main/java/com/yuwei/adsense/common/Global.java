@@ -37,4 +37,11 @@ public class Global {
         }
         return Long.parseLong(properties.getProperty(key));
     }
+
+    public static Boolean getBooleanVal(String key) {
+        if (properties == null) {
+            return false;
+        }
+        return Boolean.parseBoolean(properties.getProperty(key));
+    }
 }

@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Controller
 @RequestMapping(value = "/admin/menu")
-public class MenuController extends BaseWebController<Menu> {
+public class AdminMenuController extends BaseWebController<Menu> {
 
     @Autowired
     private MenuService menuService;
