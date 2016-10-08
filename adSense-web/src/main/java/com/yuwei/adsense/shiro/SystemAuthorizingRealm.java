@@ -50,6 +50,8 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
     private void getRolesAndPermissions(String currentUsername, List<String> roleList, List<String> permissionList) {
         //从数据库中获取当前登录用户的详细信息
         User user = userService.getByUsername(currentUsername);
+        List<Role> roles = userService.listRoles(user.getId());
+        user.setRoles(roles);
         if (null != user) {
             //实体类User中包含有用户角色的实体类信息
             if (null != user.getRoles() && user.getRoles().size() > 0) {

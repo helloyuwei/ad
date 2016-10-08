@@ -20,11 +20,11 @@ public abstract class BaseWebController<E> {
     private HttpServletRequest request;
     private HttpServletResponse response;
     private Model model;
-    private User entity;
+    private E entity;
 
     @ModelAttribute
     public void setReqAndRes(HttpServletRequest request, HttpServletResponse response,
-                             User entity, Model model) {
+                             E entity, Model model) {
         this.entity = entity;
         this.request = request;
         this.response = response;
@@ -65,11 +65,11 @@ public abstract class BaseWebController<E> {
         this.model = model;
     }
 
-    public User getEntity() {
+    public E getEntity() {
         return entity;
     }
 
-    public void setEntity(User entity) {
+    public void setEntity(E entity) {
         this.entity = entity;
     }
 }

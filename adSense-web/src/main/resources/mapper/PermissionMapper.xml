@@ -6,8 +6,6 @@
             <result property="permission" column="permission"/>
             <result property="isDelete" column="is_delete"/>
     </resultMap>
-
-
     <!-- templete 所有查询列 -->
     <sql id="QUERY_COLUMN_LIST">
         `id`,`permission`,`is_delete`

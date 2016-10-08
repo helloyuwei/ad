@@ -9,5 +9,4 @@ import com.yuwei.adsense.core.entity.Permission;
  * @author template
  */
 public interface PermissionService extends BaseService<Permission, Long> {
-
 }

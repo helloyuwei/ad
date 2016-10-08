@@ -40,6 +40,9 @@
             <if test="siteUrl != null and siteUrl != ''">
                 and `site_url` = #{siteUrl}
             </if>
+            <if test="isDelete != null and isDelete != '' or isDelete == 0">
+                and `is_delete`=#{isDelete}
+            </if>
         </where>
     </sql>
 
@@ -66,6 +69,9 @@
             </if>
             <if test="siteUrl != null and siteUrl != ''">
                 `site_url`=#{siteUrl}
+            </if>
+            <if test="isDelete != null and isDelete != ''  or isDelete == 0">
+                `is_delete`=#{isDelete}
             </if>
         </set>
     </sql>

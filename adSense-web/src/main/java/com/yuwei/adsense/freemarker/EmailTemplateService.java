@@ -2,9 +2,10 @@ package com.yuwei.adsense.freemarker;
 
 import com.yuwei.adsense.util.SpringContextUtils;
 import freemarker.template.Template;
-import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 
+import java.io.BufferedWriter;
+import java.io.StringWriter;
 import java.util.Map;
 
 /**
@@ -13,9 +14,10 @@ import java.util.Map;
 public abstract class EmailTemplateService<T> {
     private FreeMarkerConfigurer freeMarkerConfigurer;
 
-    public EmailTemplateService(){
-        freeMarkerConfigurer = (FreeMarkerConfigurer) SpringContextUtils.getApplicationContext().getBean("freeMarkerConfigurer");
+    public EmailTemplateService() {
+        //freeMarkerConfigurer = (FreeMarkerConfigurer) SpringContextUtils.getApplicationContext().getBean("freeMarkerConfigurer");
     }
+
     /**
      * 生成html模板字符串
      *
@@ -23,14 +25,16 @@ public abstract class EmailTemplateService<T> {
      * @return
      */
     protected String parseTemplate(Map<String, Object> root, String templateName) {
-        String htmlText = "";
-        try {
+       String htmlText = "";
+       /*  try {
             //通过指定模板名获取FreeMarker模板实例
             Template tpl = freeMarkerConfigurer.getConfiguration().getTemplate(templateName);
-            htmlText = FreeMarkerTemplateUtils.processTemplateIntoString(tpl, root);
+            BufferedWriter bufferedWriter = new BufferedWriter(new StringWriter());
+            tpl.process(root, bufferedWriter);
+            htmlText = bufferedWriter.toString();
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
         return htmlText;
     }
 

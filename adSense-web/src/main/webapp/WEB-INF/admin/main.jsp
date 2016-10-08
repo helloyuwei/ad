@@ -53,15 +53,20 @@
                 <ul class="nav nav-tabs nav-stacked main-menu">
                     <c:forEach items="${menus}" var="menu">
                         <li>
-                            <a href="${ctx}${menu.url}"><i class="icon-bar-chart"></i><span class="hidden-tablet"> ${menu.displayName}</span>
-                            </a>
-                            <c:if test="${not empty menu.child}">
-                                <ul>
-                                    <c:forEach items="${menu.child}" var="child">
-                                        <li><a class="submenu" href="${ctx}${child.url}"><i class="icon-file-alt"></i><span class="hidden-tablet"> ${child.displayName}</span></a></li>
-                                    </c:forEach>
-                                </ul>
-                            </c:if>
+                            <c:choose>
+                                <c:when test="${not empty menu.child}">
+                                    <a class="dropmenu" href="#"><i class="icon-folder-close-alt"></i><span class="hidden-tablet"> ${menu.displayName}</span></a>
+                                    <ul>
+                                        <c:forEach items="${menu.child}" var="child">
+                                            <li><a class="submenu" href="${ctx}${child.url}"><i class="icon-file-alt"></i><span class="hidden-tablet"> ${child.displayName}</span></a></li>
+                                        </c:forEach>
+                                    </ul>
+                                </c:when>
+                                <c:otherwise>
+                                    <a href="${ctx}${menu.url}"><i class="icon-bar-chart"></i><span class="hidden-tablet"> ${menu.displayName}</span>
+                                    </a>
+                                </c:otherwise>
+                            </c:choose>
                         </li>
                     </c:forEach>
                 </ul>

@@ -81,8 +81,8 @@ public class LoginController extends BaseWebController<User> {
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public String login(HttpServletRequest request, User eUser) {
 
-        String username = getEntity().getLoginName();
-        String password = getEntity().getPassword();
+        String username = eUser.getLoginName();
+        String password = eUser.getPassword();
         boolean isCaptcha = Global.getBooleanVal("web.view.captcha.enable");
         request.setAttribute("isCaptcha", isCaptcha);
         if (isCaptcha) {

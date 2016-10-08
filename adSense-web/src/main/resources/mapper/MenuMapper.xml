@@ -47,7 +47,7 @@
             <if test="keyName != null and keyName != ''">
                 and `key_name` = #{keyName}
             </if>
-            <if test="parentId != null and parentId != ''">
+            <if test="(parentId != null and parentId != '' ) or parentId == 0">
                 and `parent_id` = #{parentId}
             </if>
             <if test="showing != null and showing != ''">
@@ -91,7 +91,7 @@
             <if test="keyName != null and keyName != ''">
                 `key_name`=#{keyName},
             </if>
-            <if test="parentId != null and parentId != ''">
+            <if test="(parentId != null and parentId != '') or parentId == 0">
                 `parent_id`=#{parentId},
             </if>
             <if test="showing != null and showing != ''">
@@ -227,7 +227,7 @@
         <include refid="QUERY_COLUMN_LIST"/>
         <include refid="QUERY_FROM_TABLE"/>
         <include refid="QUERY_WHERE_CLAUSE"/>
-        ORDER BY order DESC
+        ORDER BY `order` ASC
     </select>
 
     <select id="selectChildren" parameterType="long" resultMap="MenuMap">
@@ -235,7 +235,7 @@
         <include refid="QUERY_COLUMN_LIST"/>
         <include refid="QUERY_FROM_TABLE"/>
         <where>
-            `parent_id`= #{id} and is_delete=0 and showing=1
+            `parent_id`= #{id} and is_delete=0 and showing=1 ORDER BY `order` ASC
         </where>
     </select>
 

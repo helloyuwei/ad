@@ -2,19 +2,26 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.yuwei.adsense.dao.RoleDao">
     <resultMap id="RoleMap" type="com.yuwei.adsense.core.entity.Role">
-            <id property="id" column="id"/>
-            <result property="name" column="name"/>
-            <result property="isDelete" column="is_delete"/>
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="isDelete" column="is_delete"/>
+        <collection property="permissions" column="id" ofType="com.yuwei.adsense.core.entity.Permission"
+                    javaType="java.util.ArrayList" select="selectPermissions"/>
     </resultMap>
-
-
+    <resultMap id="PermissionMap" type="com.yuwei.adsense.core.entity.Permission">
+        <id property="id" column="id"/>
+        <result property="permission" column="permission"/>
+        <result property="isDelete" column="is_delete"/>
+    </resultMap>
     <!-- templete 所有查询列 -->
     <sql id="QUERY_COLUMN_LIST">
         `id`,`name`,`is_delete`
     </sql>
 
     <!-- templete 查询列来源表-->
-    <sql id="QUERY_FROM_TABLE"><![CDATA[FROM t_role]]></sql>
+    <sql id="QUERY_FROM_TABLE"><![CDATA[
+        FROM t_role
+        ]]></sql>
 
     <!-- 全部条件(更多功能可以通过queryData扩展实现)  -->
     <sql id="QUERY_WHERE_CLAUSE">
@@ -33,8 +40,10 @@
 
     <!-- 智能排序与分页 -->
     <sql id="QUERY_ORDER_LIMIT_CONDTION">
-        <if test="orderField != null and orderField != '' and orderFieldType != null and orderFieldType != ''"><![CDATA[ORDER BY `${orderField}` ${orderFieldType}]]></if>
-        <if test="startIndex != null and startIndex &gt;= 0 and pageSize != null and pageSize &gt; 0"><![CDATA[LIMIT #{startIndex},#{pageSize}]]></if>
+        <if test="orderField != null and orderField != '' and orderFieldType != null and orderFieldType != ''">
+            <![CDATA[ORDER BY `${orderField}` ${orderFieldType}]]></if>
+        <if test="startIndex != null and startIndex &gt;= 0 and pageSize != null and pageSize &gt; 0">
+            <![CDATA[LIMIT #{startIndex},#{pageSize}]]></if>
     </sql>
 
     <!-- 更新列字段,只要不为NULL则更新,除开主键列 -->
@@ -65,50 +74,50 @@
     </insert>
 
     <insert id="batchInsert">
-		INSERT INTO t_role(
-            `name`,
-		) VALUES
-    <foreach collection="list" item="item" index="index" separator=",">
-		(
+        INSERT INTO t_role(
+        `name`,
+        ) VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
             #{item.name},
             #{item.isDelete}
-		)
-    </foreach>
+            )
+        </foreach>
 
     </insert>
 
 
-
-
     <!-- 返回插入的编号,在事务开启状态下有效 -->
-    <select id="lastSequence" resultType="int"><![CDATA[SELECT LAST_INSERT_ID() AS id]]></select>
+    <select id="lastSequence" resultType="int"><![CDATA[
+        SELECT LAST_INSERT_ID() AS id
+        ]]></select>
 
     <!-- 删除记录,主键IN(array) -->
-    <delete id="del" parameterType="java.lang.reflect.Array" >
+    <delete id="del" parameterType="java.lang.reflect.Array">
         DELETE
-         <include refid="QUERY_FROM_TABLE"/>
-         WHERE id IN
+        <include refid="QUERY_FROM_TABLE"/>
+        WHERE id IN
         <foreach collection="array" item="id" open="(" separator="," close=")">
             #{id}
         </foreach>
     </delete>
 
     <!-- 删除,通过条件 -->
-    <update id="deleteByCondtion" parameterType="com.yuwei.adsense.core.entity.Role" >
+    <update id="deleteByCondtion" parameterType="com.yuwei.adsense.core.entity.Role">
         DELETE
         <include refid="QUERY_FROM_TABLE"/>
         <include refid="QUERY_WHERE_CLAUSE"/>
     </update>
 
     <!-- 修改记录通过主键 -->
-    <update id="update" parameterType="com.yuwei.adsense.core.entity.Role" >
+    <update id="update" parameterType="com.yuwei.adsense.core.entity.Role">
         UPDATE t_role
         <include refid="UPDATE_COLUMN_SET"/>
         WHERE id = #{id}
     </update>
 
 
-    <update id="batchUpdate"  parameterType="java.util.List">
+    <update id="batchUpdate" parameterType="java.util.List">
         <foreach collection="list" item="item" index="index" open="" close="" separator=";">
             UPDATE t_role
             <include refid="UPDATE_COLUMN_SET"/>
@@ -117,9 +126,8 @@
     </update>
 
 
-
     <!-- 查询,通过主键IN(array) -->
-    <select id="get" parameterType="Long"  resultMap="RoleMap">
+    <select id="get" parameterType="Long" resultMap="RoleMap">
         SELECT
         <include refid="QUERY_COLUMN_LIST"/>
         <include refid="QUERY_FROM_TABLE"/>
@@ -133,7 +141,6 @@
         <include refid="QUERY_COLUMN_LIST"/>
         <include refid="QUERY_FROM_TABLE"/>
         <include refid="QUERY_WHERE_CLAUSE"/>
-        <include refid="QUERY_ORDER_LIMIT_CONDTION"/>
     </select>
 
     <!-- 总数查询,通过条件 -->
@@ -143,7 +150,10 @@
         <include refid="QUERY_WHERE_CLAUSE"/>
     </select>
 
-    <!-- 其它SQL语句 -->
-
+    <select id="selectPermissions" parameterType="long" resultMap="PermissionMap">
+        <![CDATA[SELECT p.id,p.permission,p.is_delete from t_permission p
+       JOIN t_role_permossion rp on p.id=rp.perm_id
+      where p.is_delete=0 and rp.is_delete=0 and  p.id=#{id}]]>
+    </select>
 
 </mapper>

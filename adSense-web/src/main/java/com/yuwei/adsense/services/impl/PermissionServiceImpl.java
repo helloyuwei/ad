@@ -1,6 +1,7 @@
 package com.yuwei.adsense.services.impl;
 
 import com.yuwei.adsense.core.entity.Permission;
+import com.yuwei.adsense.core.entity.Role;
 import com.yuwei.adsense.dao.BaseDao;
 import com.yuwei.adsense.dao.PermissionDao;
 import com.yuwei.adsense.services.PermissionService;
@@ -8,6 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * <br />
