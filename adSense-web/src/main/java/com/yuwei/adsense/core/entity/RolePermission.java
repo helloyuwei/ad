@@ -6,7 +6,7 @@ package com.yuwei.adsense.core.entity;
  * @author template
  * @createTime 2016-9-25 21:39:30
  */
-public class RolePermossion extends BaseEntity {
+public class RolePermission extends BaseEntity {
 
     /**
      *
@@ -36,7 +36,7 @@ public class RolePermossion extends BaseEntity {
 
     public String toString() {
         StringBuffer sb = new StringBuffer();
-        sb.append("RolePermossion [");
+        sb.append("RolePermission [");
         sb.append("id = ");
         sb.append(id);
         sb.append(", roleId = ");

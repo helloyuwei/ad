@@ -22,6 +22,7 @@ public class PopulateConfigFilter implements Filter {
         httpServletRequest.setAttribute(RequestUtils.CONTEXT_PATH_KEY, RequestUtils.getContextPath());
         httpServletRequest.setAttribute(RequestUtils.STATIC_RESOURCE_URL_KEY, RequestUtils.getStaticUrl());
         httpServletRequest.setAttribute(RequestUtils.CURRENT_SITE_KEY, SpringContextUtils.getCurrentSite());
+        httpServletRequest.setAttribute(RequestUtils.ACTION_SUFFIX, RequestUtils.getActionSuffix());
         chain.doFilter(request, response);
     }
 

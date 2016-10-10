@@ -5,13 +5,16 @@ import com.yuwei.adsense.core.entity.Site;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 /**
  * Created by YuWei on 2016/9/27.
  */
-public class SpringContextUtils {
+@Component
+public class SpringContextUtils implements ApplicationContextAware {
 
     private static final Logger logger = LoggerFactory.getLogger(SpringContextUtils.class);
 
@@ -29,11 +32,7 @@ public class SpringContextUtils {
         SpringContextUtils.webApplicationContext = webApplicationContext;
     }
 
-    public static ApplicationContext getApplicationContext() {
-        return applicationContext;
-    }
-
-    public static void setApplicationContext(ApplicationContext applicationContext) {
+    public void setApplicationContext(ApplicationContext applicationContext) {
         SpringContextUtils.applicationContext = applicationContext;
     }
 
@@ -53,5 +52,44 @@ public class SpringContextUtils {
         }
         logger.warn("Can not find site for current url:", servletPath);
         return null;
+    }
+
+    /**
+     * 取得存储在静态变量中的ApplicationContext.
+     */
+    public static ApplicationContext getApplicationContext() {
+        checkApplicationContext();
+        return SpringContextUtils.applicationContext;
+    }
+
+    /**
+     * 从静态变量ApplicationContext中取得Bean, 自动转型为所赋值对象的类型.
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> T getBean(String name) {
+        checkApplicationContext();
+        return (T) SpringContextUtils.applicationContext.getBean(name);
+    }
+
+    /**
+     * 从静态变量ApplicationContext中取得Bean, 自动转型为所赋值对象的类型.
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> T getBean(Class<T> clazz) {
+        checkApplicationContext();
+        return (T) SpringContextUtils.applicationContext.getBeansOfType(clazz);
+    }
+
+    /**
+     * 清除applicationContext静态变量.
+     */
+    public static void cleanApplicationContext() {
+        SpringContextUtils.applicationContext = null;
+    }
+
+    private static void checkApplicationContext() {
+        if (SpringContextUtils.applicationContext == null) {
+            throw new IllegalStateException("applicaitonContext未注入,请在applicationContext.xml中定义SpringContextHolder");
+        }
     }
 }

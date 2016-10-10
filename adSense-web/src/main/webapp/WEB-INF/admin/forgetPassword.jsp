@@ -10,7 +10,7 @@
                     <a href="#"><i class="halflings-icon cog"></i></a>
                 </div>
                 <h2>重置密码</h2>
-                <form class="form-horizontal" action="${ctx}${adminPath}/sendResetPassword" method="post">
+                <form class="form-horizontal" action="${ctx}${adminPath}/sendResetPassword${suffix}" method="post">
                     <fieldset>
 
                         <div class="input-prepend" title="账号">
@@ -33,7 +33,7 @@
                             <span class="add-on"><i class="halflings-icon lock"></i></span>
                             <input class="input-large span8" name="verifyCode" id="verifyCode" type="text"
                                    placeholder="请输入验证信息"/>
-                            <img class="span2" src="${ctx}${adminPath}/getVerifyCodeImage"/>
+                            <img class="span2" src="${ctx}${adminPath}/getVerifyCodeImage${suffix}"/>
                         </div>
 
                         <div class="clearfix"></div>

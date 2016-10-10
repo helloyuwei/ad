@@ -22,7 +22,6 @@ public class WebContextInitializedListener implements ApplicationListener<Contex
 
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
         if (contextRefreshedEvent.getApplicationContext().getParent() == null) {
-            SpringContextUtils.setApplicationContext(contextRefreshedEvent.getApplicationContext());
             logger.info("加载站点信息.....");
             List<Site> sites = siteService.loadAllSites();
             SpringContextUtils.addAllSites(sites);

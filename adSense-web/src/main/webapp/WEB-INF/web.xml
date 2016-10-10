@@ -85,7 +85,7 @@
 
     <servlet-mapping>
         <servlet-name>springMvc</servlet-name>
-        <url-pattern>/</url-pattern>
+        <url-pattern>/*.ads</url-pattern>
     </servlet-mapping>
 
     <session-config>

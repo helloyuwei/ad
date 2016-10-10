@@ -9,7 +9,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </a>
-            <a class="brand" href="/dic/add.do"><span>Metro</span></a>
+            <a class="brand" href="/dic/add${suffix}"><span>Metro</span></a>
 
             <!-- start: Header Menu -->
             <div class="nav-no-collapse header-nav">
@@ -31,7 +31,7 @@
                                 <span>设置</span>
                             </li>
                             <li><a href="#"><i class="halflings-icon user"></i>个人信息</a></li>
-                            <li><a href="${ctx}${adminPath}/logout"><i class="halflings-icon off"></i> Logout</a></li>
+                            <li><a href="${ctx}${adminPath}/logout${suffix}"><i class="halflings-icon off"></i> Logout</a></li>
                         </ul>
                     </li>
                     <!-- end: User Dropdown -->
@@ -58,7 +58,7 @@
                                     <a class="dropmenu" href="#"><i class="icon-folder-close-alt"></i><span class="hidden-tablet"> ${menu.displayName}</span></a>
                                     <ul>
                                         <c:forEach items="${menu.child}" var="child">
-                                            <li><a class="submenu" href="${ctx}${child.url}"><i class="icon-file-alt"></i><span class="hidden-tablet"> ${child.displayName}</span></a></li>
+                                            <li><a class="submenu" href="${ctx}${child.url}${suffix}"><i class="icon-file-alt"></i><span class="hidden-tablet"> ${child.displayName}</span></a></li>
                                         </c:forEach>
                                     </ul>
                                 </c:when>

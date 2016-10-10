@@ -20,6 +20,7 @@ public class RequestUtils {
     public static final String CONTEXT_PATH_KEY = "ctx";
     public static final String STATIC_RESOURCE_URL_KEY = "staticPath";
     public static final String CURRENT_SITE_KEY = "site";
+    public static final String ACTION_SUFFIX="suffix";
 
     private static ThreadLocal<HttpServletRequest> servletRequestThreadLocal = new ThreadLocal<HttpServletRequest>();
 
@@ -136,5 +137,9 @@ public class RequestUtils {
             return true;
         }
         return false;
+    }
+
+    public static Object getActionSuffix() {
+        return Global.getStringVal("web.action.suffix");
     }
 }
