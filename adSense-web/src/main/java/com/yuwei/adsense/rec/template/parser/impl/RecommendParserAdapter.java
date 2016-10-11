@@ -1,7 +1,6 @@
 package com.yuwei.adsense.rec.template.parser.impl;
 
 import com.google.common.collect.Lists;
-import com.yuwei.adsense.rec.template.entity.RecommendObject;
 import com.yuwei.adsense.rec.template.parser.RecommendParser;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Row;
