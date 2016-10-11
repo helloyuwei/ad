@@ -1,7 +1,7 @@
-package com.yuwei.adsense.rec.template.parser.impl;
+package com.yuwei.adsense.ad.template.parser.impl;
 
-import com.yuwei.adsense.rec.template.entity.CouponObject;
-import com.yuwei.adsense.rec.template.entity.RecommendObject;
+import com.yuwei.adsense.ad.template.entity.CouponObject;
+import com.yuwei.adsense.ad.template.entity.RecommendObject;
 import org.apache.poi.ss.usermodel.Row;
 import org.springframework.stereotype.Service;
 

@@ -1,4 +1,4 @@
-package com.yuwei.adsense.rec.template.entity;
+package com.yuwei.adsense.ad.template.entity;
 
 /**
  * Created by YuWei on 2016/10/11.

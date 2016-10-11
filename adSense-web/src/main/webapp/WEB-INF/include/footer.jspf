@@ -6,5 +6,5 @@
 </footer>
 <%@ include file="javascript.jsp" %>
 </body>
-<%@ include file="../baiduJavaScriptPush.jsp" %>
+<%@ include file="baiduJavaScriptPush.jsp" %>
 </html>

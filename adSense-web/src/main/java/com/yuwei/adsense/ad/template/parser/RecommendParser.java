@@ -1,4 +1,4 @@
-package com.yuwei.adsense.rec.template.parser;
+package com.yuwei.adsense.ad.template.parser;
 
 import java.io.File;
 import java.util.List;
