@@ -54,9 +54,7 @@ public class HttpUtil {
                 HttpEntity entity = response.getEntity();
                 String content = EntityUtils.toString(entity, default_charset);
                 if (entity != null) {
-                    logger.debug("--------------------------------------");
-                    logger.debug("Response content: " + content);
-                    logger.debug("--------------------------------------");
+                    printResponseContent(content);
                 }
                 return content;
             } finally {
@@ -89,13 +87,12 @@ public class HttpUtil {
     }
 
     /**
-
      * @param postUrl
-     * @param Parameters
+     * @param parameters
      * @return
      */
-    public static String post(String postUrl, String[] Parameters) {
-        if (null == postUrl || null == Parameters || Parameters.length == 0) {
+    public String post(String postUrl, String[] parameters) {
+        if (null == postUrl || null == parameters || parameters.length == 0) {
             return null;
         }
         String content = "";
@@ -118,7 +115,7 @@ public class HttpUtil {
             out = new PrintWriter(conn.getOutputStream());
             //发送请求参数
             String param = "";
-            for (String s : Parameters) {
+            for (String s : parameters) {
                 param += s + "\n";
             }
             out.print(param.trim());
@@ -131,9 +128,7 @@ public class HttpUtil {
                 content += line;
             }
 
-            logger.debug("--------------------------------------");
-            logger.debug("Response content: " + content);
-            logger.debug("--------------------------------------");
+            printResponseContent(content);
 
         } catch (Exception e) {
             System.out.println("发送post请求出现异常！" + e);
@@ -224,65 +219,9 @@ public class HttpUtil {
         return formParams;
     }
 
-    /* *//**
-     * HttpClient连接SSL
-     *//*
-    public void ssl() {
-        CloseableHttpClient httpclient = null;
-        try {
-            KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
-            FileInputStream instream = new FileInputStream(new File("d:\\tomcat.keystore"));
-            try {
-                // 加载keyStore d:\\tomcat.keystore
-                trustStore.load(instream, "123456".toCharArray());
-            } catch (CertificateException e) {
-                e.printStackTrace();
-            } finally {
-                try {
-                    instream.close();
-                } catch (Exception ignore) {
-                }
-            }
-            // 相信自己的CA和所有自签名的证书
-            SSLContext sslcontext = SSLContexts.custom().loadTrustMaterial(trustStore, new TrustSelfSignedStrategy()).build();
-            // 只允许使用TLSv1协议
-            SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(sslcontext, new String[]{"TLSv1"}, null,
-                    SSLConnectionSocketFactory.BROWSER_COMPATIBLE_HOSTNAME_VERIFIER);
-            httpclient = HttpClients.custom().setSSLSocketFactory(sslsf).build();
-            // 创建http请求(get方式)
-            HttpGet httpget = new HttpGet("https://localhost:8443/myDemo/Ajax/serivceJ.action");
-            logger.debug("executing request" + httpget.getRequestLine());
-            CloseableHttpResponse response = httpclient.execute(httpget);
-            try {
-                HttpEntity entity = response.getEntity();
-                logger.debug("----------------------------------------");
-                logger.debug(response.getStatusLine());
-                if (entity != null) {
-                    logger.debug("Response content length: " + entity.getContentLength());
-                    logger.debug(EntityUtils.toString(entity));
-                    EntityUtils.consume(entity);
-                }
-            } finally {
-                response.close();
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (KeyManagementException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (KeyStoreException e) {
-            e.printStackTrace();
-        } finally {
-            if (httpclient != null) {
-                try {
-                    httpclient.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }*/
+    private void printResponseContent(String content) {
+        logger.debug("--------------------------------------");
+        logger.debug("Response content: " + content);
+        logger.debug("--------------------------------------");
+    }
 }
