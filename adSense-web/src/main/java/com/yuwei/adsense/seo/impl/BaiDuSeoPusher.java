@@ -35,7 +35,7 @@ public class BaiDuSeoPusher implements SeoPusher {
         if (StringUtils.isEmpty(url)) {
             return;
         }
-        httpUtil.postForString(getConfig().getUrl(), getConfig());
+        httpUtil.post(getConfig().getUrl(), null);
         logger.info("提交url到百度成功!");
     }
 

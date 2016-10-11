@@ -131,7 +131,7 @@ public class HttpUtil {
             printResponseContent(content);
 
         } catch (Exception e) {
-            System.out.println("发送post请求出现异常！" + e);
+            logger.error("发送post请求出现异常！" + e);
             e.printStackTrace();
         } finally {
             try {

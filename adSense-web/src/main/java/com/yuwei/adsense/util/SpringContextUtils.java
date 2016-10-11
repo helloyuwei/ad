@@ -65,7 +65,6 @@ public class SpringContextUtils implements ApplicationContextAware {
     /**
      * 从静态变量ApplicationContext中取得Bean, 自动转型为所赋值对象的类型.
      */
-    @SuppressWarnings("unchecked")
     public static <T> T getBean(String name) {
         checkApplicationContext();
         return (T) SpringContextUtils.applicationContext.getBean(name);
@@ -74,7 +73,6 @@ public class SpringContextUtils implements ApplicationContextAware {
     /**
      * 从静态变量ApplicationContext中取得Bean, 自动转型为所赋值对象的类型.
      */
-    @SuppressWarnings("unchecked")
     public static <T> T getBean(Class<T> clazz) {
         checkApplicationContext();
         return (T) SpringContextUtils.applicationContext.getBeansOfType(clazz);
@@ -89,7 +87,7 @@ public class SpringContextUtils implements ApplicationContextAware {
 
     private static void checkApplicationContext() {
         if (SpringContextUtils.applicationContext == null) {
-            throw new IllegalStateException("applicaitonContext未注入,请在applicationContext.xml中定义SpringContextHolder");
+            throw new IllegalStateException("applicationContext未注入,请在applicationContext.xml中定义SpringContextUtils");
         }
     }
 }
