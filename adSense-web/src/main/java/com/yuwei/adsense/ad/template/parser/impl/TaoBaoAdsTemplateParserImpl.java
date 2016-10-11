@@ -11,8 +11,8 @@ import java.util.List;
 /**
  * Created by YuWei on 2016/10/11.
  */
-@Service("taobaoRecommendParser")
-public class TaoBaoRecommendParserImpl extends RecommendParserAdapter<RecommendObject> {
+@Service("taobaoAdsTemplateParser")
+public class TaoBaoAdsTemplateParserImpl extends AdsTemplateParserAdapter<RecommendObject> {
 
     protected RecommendObject doRow(Row row) {
         RecommendObject ro = new RecommendObject();
@@ -36,7 +36,7 @@ public class TaoBaoRecommendParserImpl extends RecommendParserAdapter<RecommendO
 
     public static void main(String[] args) {
         File file = new File("D://test.xls");
-        List<RecommendObject> recommendObjectList = new TaoBaoRecommendParserImpl().parse(file);
+        List<RecommendObject> recommendObjectList = new TaoBaoAdsTemplateParserImpl().parse(file);
         System.out.println(recommendObjectList.size());
     }
 }

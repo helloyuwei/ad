@@ -1,7 +1,7 @@
 package com.yuwei.adsense.ad.template.parser.impl;
 
 import com.google.common.collect.Lists;
-import com.yuwei.adsense.ad.template.parser.RecommendParser;
+import com.yuwei.adsense.ad.template.parser.AdsTemplateParser;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * Created by YuWei on 2016/10/11.
  */
-public abstract class RecommendParserAdapter<T> implements RecommendParser<T> {
+public abstract class AdsTemplateParserAdapter<T> implements AdsTemplateParser<T> {
     private Workbook workbook;
 
     public List<T> parse(File file) {

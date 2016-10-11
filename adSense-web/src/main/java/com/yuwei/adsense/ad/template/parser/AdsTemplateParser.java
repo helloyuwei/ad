@@ -6,6 +6,6 @@ import java.util.List;
 /**
  * Created by YuWei on 2016/10/11.
  */
-public interface RecommendParser<T> {
+public interface AdsTemplateParser<T> {
     List<T> parse(File file);
 }
