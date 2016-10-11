@@ -1,9 +1,10 @@
 <div class="clearfix"></div>
 <footer>
     <p>
-        <span style="text-align:left;float:left">${site.copyright} <a href="${site.siteUrl}"
+        <span style="text-align:left;float:left">${site.copyright} <a href="${site.siteUrl}"/></span>
     </p>
 </footer>
 <%@ include file="javascript.jsp" %>
 </body>
+<%@ include file="../baiduJavaScriptPush.jsp" %>
 </html>
