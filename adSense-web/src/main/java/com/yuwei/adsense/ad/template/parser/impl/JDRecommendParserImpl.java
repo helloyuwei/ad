@@ -23,8 +23,8 @@ public class JDRecommendParserImpl extends RecommendParserAdapter<RecommendObjec
         String time = row.getCell(7).getStringCellValue();
         if (!StringUtils.isEmpty(time)) {
             String[] values = time.split("至");
-            ro.setStartTime(getTimeFromString(values[0].trim()));
-            ro.setEndTime(getTimeFromString(values[1].trim()));
+            ro.setStartTime(parsTime(values[0].trim()));
+            ro.setEndTime(parsTime(values[1].trim()));
         }
         return ro;
     }

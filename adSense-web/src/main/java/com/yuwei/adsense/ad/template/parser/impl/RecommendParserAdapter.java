@@ -64,7 +64,7 @@ public abstract class RecommendParserAdapter<T> implements RecommendParser<T> {
         return recommendObjectList;
     }
 
-    protected Long getTimeFromString(String timeStr) {
+    protected Long parsTime(String timeStr) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try {
             return sdf.parse(timeStr).getTime();
@@ -76,7 +76,7 @@ public abstract class RecommendParserAdapter<T> implements RecommendParser<T> {
                 e1.printStackTrace();
             }
         }
-        return 0l;
+        return 0L;
     }
 
     protected abstract T doRow(Row row);

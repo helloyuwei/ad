@@ -58,6 +58,14 @@ public class Ad extends BaseEntity {
      */
     private Integer contentType;
 
+    private String url;
+
+    private String imgUrl;
+
+    private Double price;
+
+    private String goodsId;
+
 
     public void setFrom(Integer from) {
         this.from = from;
@@ -137,6 +145,38 @@ public class Ad extends BaseEntity {
 
     public Integer getContentType() {
         return this.contentType;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public String getGoodsId() {
+        return goodsId;
+    }
+
+    public void setGoodsId(String goodsId) {
+        this.goodsId = goodsId;
     }
 
     public String toString() {

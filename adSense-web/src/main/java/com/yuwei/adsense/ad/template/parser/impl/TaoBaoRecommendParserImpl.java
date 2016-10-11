@@ -22,13 +22,13 @@ public class TaoBaoRecommendParserImpl extends RecommendParserAdapter<RecommendO
         ro.setShortUrl(row.getCell(15).getStringCellValue());
         ro.setLongUrl(row.getCell(16).getStringCellValue());
         ro.setPrice(Double.valueOf(row.getCell(5).getStringCellValue()));
-        ro.setStartTime(getTimeFromString(row.getCell(12).getStringCellValue()));
-        ro.setEndTime(getTimeFromString(row.getCell(13).getStringCellValue()));
+        ro.setStartTime(parsTime(row.getCell(12).getStringCellValue()));
+        ro.setEndTime(parsTime(row.getCell(13).getStringCellValue()));
         CouponObject coupon = new CouponObject();
         coupon.setUrl(row.getCell(23).getStringCellValue());
         coupon.setGoodsId(row.getCell(0).getStringCellValue());
-        coupon.setStartTime(getTimeFromString(row.getCell(21).getStringCellValue()));
-        coupon.setEndTime(getTimeFromString(row.getCell(22).getStringCellValue()));
+        coupon.setStartTime(parsTime(row.getCell(21).getStringCellValue()));
+        coupon.setEndTime(parsTime(row.getCell(22).getStringCellValue()));
         coupon.setDesc(row.getCell(20).getStringCellValue());
         ro.setCoupon(coupon);
         return ro;
